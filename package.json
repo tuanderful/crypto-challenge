@@ -6,9 +6,9 @@
   "directories": {
     "test": "test"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
+    "colors": "^1.1.2",
     "nodeunit": "^0.9.1"
   },
   "scripts": {

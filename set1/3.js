@@ -3,7 +3,7 @@
 var INPUT = '1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736';
 
 /**
- * Takes in two hexcodes.
+ * Takes in two string hexcodes.
  * Returns a hexode.
  */
 function hexXOR(a, b) {
@@ -12,13 +12,19 @@ function hexXOR(a, b) {
 }
 
 
+/**
+ * [singleByteXOR description]
+ * @param  {string} message hex encoded message
+ * @param  {string} hexKey  2 char string
+ * @return {string}         decoded message, in hex
+ */
 function singleByteXOR(message, hexKey) {
     var output = [];
 
     // Every two char of the input is a hexcode.
     // Iterate over each hexcode, XOR with the key
-    for (let i = 0; i < INPUT.length; i += 2) {
-        let hexChar = INPUT.slice(i, i + 2);
+    for (let i = 0; i < message.length; i += 2) {
+        let hexChar = message.slice(i, i + 2);
         output.push(hexXOR(hexChar, hexKey));
     }
 
@@ -37,17 +43,46 @@ function etoainScore(string) {
 }
 
 
-// -----------------------------------------------------------------------------
-for (let i = 0; i < 256; i++) {
-    // convert key to hexcode, then
-    var decodedMessage = singleByteXOR(INPUT, i.toString('16'));
-    var score = etoainScore(decodedMessage);
+/**
+ * -----------------------------------------------------------------------------
+ * Return a map of scores.
+ * Key: score
+ * Value: {
+ *   key
+ *   result
+ * }
+ *
+ * thre
+ */
+function computeEtoainScores(input, threshold) {
+    var resultsMap = {};
 
-    if (score > 10) {
-        console.log(`key: ${i}  score: ${score}`);
-        console.log(decodedMessage + '\n');
+    for (let i = 0; i < 256; i++) {
+        // convert key to hexcode
+        var decodedMessage = singleByteXOR(input, i.toString('16'));
+        var score = etoainScore(decodedMessage);
+
+        if (resultsMap[score] === undefined) {
+            resultsMap[score] = [];
+        }
+        resultsMap[score].push({
+            key: i,
+            message: decodedMessage
+        })
     }
+
+    // Trim results based off threshold
+    threshold = typeof threshold === 'undefined' ? 1 : threshold;
+    Object.keys(resultsMap).forEach(function(score) {
+        if (score < threshold) {
+            delete resultsMap[score];
+        }
+    });
+
+    return resultsMap;
 }
+
+// console.log(computeEtoainScores(INPUT));
 
 /**
  * -----------------------------------------------------------------------------
@@ -64,3 +99,7 @@ for (let i = 0; i < 256; i++) {
     cOOKINGmcSLIKEAPOUNDOFBACON
 
  */
+
+module.exports = {
+    computeEtoainScores
+}
