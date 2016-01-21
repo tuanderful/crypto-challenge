@@ -2,8 +2,8 @@
  * Implement repeating-key XOR
     Here is the opening stanza of an important work of the English language:
 
-    Burning 'em, if you ain't quick and nimble
-    I go crazy when I hear a cymbal
+        Burning 'em, if you ain't quick and nimble
+        I go crazy when I hear a cymbal
 
     Encrypt it, under the key "ICE", using repeating-key XOR.
 
@@ -20,3 +20,36 @@
     Encrypt your mail. Encrypt your password file. Your .sig file.
     Get a feel for it. I promise, we aren't wasting your time with this.
  */
+
+var INPUT = "Burning 'em, if you ain't quick and nimble\nI go crazy when I hear a cymbal";
+var KEY = "ICE";
+
+var hexXOR = require('./3.js').hexXOR;
+
+// <string>.charCodeAt(x) - gives the unicode value for the character in position x of <string>
+//
+
+
+function repeatingKeyXOR(message, key) {
+    var keyLength = key.length;
+    var output = [];
+
+    message.split('').forEach(function(curr, index, array) {
+        var offset = index % keyLength;
+
+        var messageCharHex = message.charCodeAt(index).toString(16);
+        var keyCharHex = key.charCodeAt(offset).toString(16);
+
+        output.push(hexXOR(messageCharHex, keyCharHex));
+    });
+
+    return output.join('');
+}
+
+
+// console.log(repeatingKeyXOR(INPUT, KEY));
+
+
+module.exports = {
+    repeatingKeyXOR
+}

@@ -7,8 +7,9 @@ var INPUT = '1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b373
  * Returns a hexode.
  */
 function hexXOR(a, b) {
-    return ('0x' + a ^ '0x' + b)
-        .toString('16');
+    var ret = ('0x' + a ^ '0x' + b).toString('16');
+
+    return ret.length === 1 ? '0' + ret : ret;
 }
 
 
@@ -52,7 +53,7 @@ function etoainScore(string) {
  *   result
  * }
  *
- * thre
+ * threshold
  */
 function computeEtoainScores(input, threshold) {
     var resultsMap = {};
@@ -101,5 +102,6 @@ function computeEtoainScores(input, threshold) {
  */
 
 module.exports = {
+    hexXOR,
     computeEtoainScores
 }

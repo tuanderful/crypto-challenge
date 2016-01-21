@@ -6,22 +6,26 @@ var colors = require('colors');
  * been encrypted by single-character XOR.
  */
 
+const THRESHOLD = 12;
+
 const computeEtoainScores = require('./3.js').computeEtoainScores;
 
 const readline = require('readline');
 const fs = require('fs');
-
 const rl = readline.createInterface({
     terminal: false,
     input: fs.createReadStream('4.txt')
 });
 
 
-
 var lineNumber = 1;
 rl.on('line', function (line) {
-    console.log(`Line ${lineNumber} from file: ${line}`.cyan);
-    console.log(require('./3.js').computeEtoainScores(line, 10));
+    var scores = computeEtoainScores(line, THRESHOLD);
+
+    if (Object.keys(scores).length > 0) {
+      console.log(`Line ${lineNumber} from file: ${line}`.cyan);
+      console.log(scores);
+   }
 
     lineNumber++;
 });
