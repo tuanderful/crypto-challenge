@@ -34,7 +34,7 @@ function repeatingKeyXOR(message, key) {
     var keyLength = key.length;
     var output = [];
 
-    message.split('').forEach(function(curr, index, array) {
+    message.split('').forEach((curr, index, array) => {
         var offset = index % keyLength;
 
         var messageCharHex = message.charCodeAt(index).toString(16);
